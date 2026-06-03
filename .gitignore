@@ -1,0 +1,5 @@
+# Ignore VS Code workspace settings
+.vscode/
+
+# Ignore Windows thumbnail caches
+Thumbs.db
