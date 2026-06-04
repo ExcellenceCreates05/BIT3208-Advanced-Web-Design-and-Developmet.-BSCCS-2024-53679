@@ -1,8 +1,8 @@
 <?php
-// start the session first to track if the user is logged in or not
+
 session_start();
 
-// Security Gatekeeper: If they don't have a session, kick them back to login
+
 if (!isset($_SESSION['manager_email'])) {
     header("Location: login.php");
     exit();

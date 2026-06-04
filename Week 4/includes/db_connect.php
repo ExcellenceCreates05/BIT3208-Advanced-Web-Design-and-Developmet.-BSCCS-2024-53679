@@ -2,20 +2,20 @@
 
 $host = "localhost";
 $dbname = "decorum_bookshop"; 
-$username = "root"; // Default XAMPP username
-$password = ""; // Default XAMPP password is blank
+$username = "root"; 
+$password = ""; 
 
 
 $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
 try {
-    // Create a new PDO instance to connect to the database
+    
     $pdo = new PDO($dsn, $username, $password);
     
-    // Set PDO to throw exceptions if there is an SQL error
+    
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    // Syllabus Requirement: Display success message
+    
     echo "<h3 style='color: green; text-align: center; margin-top: 50px;'>Database Connected Successfully</h3>";
     
 } catch (PDOException $e) {
