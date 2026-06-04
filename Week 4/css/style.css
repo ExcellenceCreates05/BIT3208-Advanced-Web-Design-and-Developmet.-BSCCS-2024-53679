@@ -61,3 +61,66 @@ body.login-bg {
 .primary-btn:hover {
     background-color: darkblue; /* Added a hover effect since we are in CSS! */
 }
+/* --- ERROR & STATUS MESSAGES --- */
+.error-text {
+    color: red; 
+    font-size: 12px; 
+    display: none; /* Hidden by default until JS shows it */
+    margin-top: 5px;
+}
+
+.status-text {
+    font-size: 12px; 
+    font-weight: bold; 
+    display: block; 
+    margin-top: 5px;
+}
+
+/* --- DASHBOARD LAYOUT --- */
+.dashboard-body {
+    font-family: sans-serif; 
+    background-color: #f4f4f9; 
+    margin: 0; 
+    display: flex;
+}
+
+.sidebar {
+    width: 250px; 
+    background-color: white; 
+    height: 100vh; 
+    padding: 20px; 
+    border-right: 1px solid #ccc; 
+    transition: 0.3s; /* Smooth sliding animation */
+}
+
+.sidebar.hidden {
+    display: none; /* The class your JavaScript toggles */
+}
+
+.main-content {
+    padding: 40px; 
+    flex-grow: 1;
+}
+
+/* --- DASHBOARD ELEMENTS --- */
+.nav-list {
+    list-style-type: none; 
+    padding: 0;
+}
+
+.nav-item {
+    margin-bottom: 15px;
+}
+
+.nav-link {
+    text-decoration: none; 
+    color: gray;
+}
+
+.nav-link:hover {
+    color: blue;
+}
+
+.nav-link.danger {
+    color: red;
+}
