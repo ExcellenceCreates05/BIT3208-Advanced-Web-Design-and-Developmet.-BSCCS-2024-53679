@@ -1,6 +1,8 @@
 <?php
 // login.php
 session_start();
+session_destroy();
+session_start();
 require_once __DIR__ . '/includes/db_connect.php';
 
 if (isset($_SESSION['user_id'])) {
@@ -13,8 +15,29 @@ $error_message = '';
 $username_value = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if ($_SESSION['login_attempts'] >= 5) { die("Account locked."); }
+  // 1. Initialize attempts
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+}
 
+if (isset($_SESSION['lockout_time']) && time() < $_SESSION['lockout_time']) {
+    // Calculate minutes left
+    $minutes_left = ceil(($_SESSION['lockout_time'] - time()) / 60);
+    die("<div style='text-align:center; padding: 50px; font-family: Arial;'><h2>Account Locked</h2><p>Too many failed attempts. Please try again in $minutes_left minute(s).</p></div>");
+}
+
+$error_message = '';
+$username_value = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // 3. NEW: If they hit 5 attempts, set a 5-minute penalty timer!
+    if ($_SESSION['login_attempts'] >= 5) {
+        $_SESSION['lockout_time'] = time() + (2 * 60); // Current time + 2 minutes
+        die("<div style='text-align:center; padding: 50px; font-family: Arial;'><h2>Account Locked</h2><p>Too many failed attempts. Please try again in 2 minutes.</p></div>");
+    }
+
+    // 2. Sanitize and validate input
     $username = trim(strip_tags($_POST['username'] ?? ''));
     $password = trim($_POST['password'] ?? '');
     $username_value = htmlspecialchars($username);
@@ -42,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['login_attempts']++;
             $error_message = 'Invalid credentials. Attempts remaining: ' . (5 - $_SESSION['login_attempts']);
         }
-    }
+    }}
 }
 ?>
 <!DOCTYPE html>
