@@ -1,210 +1,97 @@
 <?php
-/**
- * =============================================================
- * index.php — Book Catalog / Requisition Page (Week 4)
- * =============================================================
- * Accessible by: ALL logged-in users (admin + manager)
- * Managers: view books + submit requisitions
- * Admins:   view books (full CRUD is on dashboard.php)
- * =============================================================
- */
-
+// index.php (Manager / User)
 require_once __DIR__ . '/includes/auth_guard.php';
 require_once __DIR__ . '/includes/db_connect.php';
+requireLogin();
 
-requireLogin(); // Any logged-in user can view this page
+$flash = $_SESSION['flash_success'] ?? '';
+unset($_SESSION['flash_success']);
+$error = $_SESSION['flash_error'] ?? '';
+unset($_SESSION['flash_error']);
 
-// --- Flash message (set by process_requisition.php on success) ---
-$flash = '';
-if (isset($_SESSION['flash_success'])) {
-    $flash = $_SESSION['flash_success'];
-    unset($_SESSION['flash_success']); // Show once only
-}
-
-// --- Fetch all books from the database ---
-$stmt  = $pdo->query("SELECT * FROM books ORDER BY title ASC");
-$books = $stmt->fetchAll();
-
-// --- Get user session data ---
-$fullName  = sessionGet('full_name');
-$role      = sessionGet('role');
-$initials  = getUserInitials();
-$today     = date('l, F j Y');
+$books = $pdo->query("SELECT * FROM books ORDER BY title ASC")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book Catalog — Decorum Bookshop B2B Portal</title>
+  <title>Products Catalog - Decorum</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <div class="app-wrapper">
-
-  <!-- SIDEBAR -->
+  
   <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-icon">📚</div>
-      <h1>Decorum Bookshop</h1>
-      <p>B2B Inventory Portal</p>
-    </div>
+    <div class="sidebar-brand">Decorum Bookshop</div>
     <nav class="sidebar-nav">
-      <p class="nav-section-label">Main Menu</p>
       <ul>
-        <li class="nav-item"><a href="index.php" class="active"><span class="nav-icon">📋</span> Book Catalog</a></li>
-        <li class="nav-item"><a href="my_requisitions.php"><span class="nav-icon">📦</span> My Requisitions</a></li>
+        <li><a href="index.php" class="active">Products</a></li>
+        <li><a href="requisitions.php">My Orders</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="logout.php" style="color: #FCA5A5;">Logout</a></li>
       </ul>
-      <?php if ($role === 'admin'): ?>
-      <p class="nav-section-label" style="margin-top:16px;">Administration</p>
-      <ul>
-        <li class="nav-item"><a href="dashboard.php"><span class="nav-icon">⚙️</span> Admin Dashboard</a></li>
-      </ul>
-      <?php endif; ?>
     </nav>
-    <div class="sidebar-footer">
-      <div class="user-info">
-        <div class="user-avatar"><?php echo $initials; ?></div>
-        <div class="user-details">
-          <div class="user-name"><?php echo htmlspecialchars($fullName); ?></div>
-          <div class="user-role"><?php echo ucfirst($role); ?></div>
-        </div>
-      </div>
-      <a href="logout.php" class="btn btn-logout btn-sm" style="width:100%;justify-content:center;">🚪 Logout</a>
-    </div>
   </aside>
 
-  <!-- MAIN CONTENT -->
   <main class="main-content">
-
     <div class="topbar">
-      <div class="topbar-left">
-        <h2>Book Catalog</h2>
-        <div class="breadcrumb">Home › Book Catalog</div>
-      </div>
-      <div class="topbar-right">
-        <span style="font-size:0.78rem;color:var(--grey-400);"><?php echo $today; ?></span>
-      </div>
+      <h2>Products Catalog</h2>
     </div>
 
     <div class="page-body">
+      <?php if ($flash): ?><div class="alert alert-success"><?php echo htmlspecialchars($flash); ?></div><?php endif; ?>
+      <?php if ($error): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div><?php endif; ?>
 
-      <?php if ($flash): ?>
-        <div class="alert alert-success auto-dismiss">✅ <?php echo htmlspecialchars($flash); ?></div>
-      <?php endif; ?>
-
-      <div class="alert alert-info">
-        ℹ️ Enter required quantities in the <strong>Qty Needed</strong> column, then click <strong>Submit Requisition</strong>.
-      </div>
-
-      <!--
-        FORM: POST to process_requisition.php
-        Wraps the entire table so all qty inputs are submitted together
-      -->
-      <form action="process_requisition.php" method="POST" id="requisitionForm">
-
+      <form action="process_requisition.php" method="POST">
         <div class="table-card">
-
           <div class="table-header">
-            <div>
-              <h3>Master Book Inventory</h3>
-              <div class="table-subtitle">
-                <?php echo count($books); ?> titles available · <?php echo $today; ?>
-              </div>
-            </div>
-            <div class="table-actions">
-              <div class="search-box">
-                <span>🔍</span>
-                <input type="text" placeholder="Search title, author, ISBN..." id="searchInput">
-              </div>
-              <?php if ($role === 'manager'): ?>
-              <button type="submit" class="btn btn-primary">📤 Submit Requisition</button>
-              <?php endif; ?>
-            </div>
+             <div class="search-bar">
+               <input type="text" class="form-control" placeholder="Search Inventory">
+               <select class="form-control" style="width: auto;">
+                 <option>Search Category</option>
+                 <option>Fiction</option>
+                 <option>Classic</option>
+                 <option>Science</option>
+               </select>
+             </div>
+             <button type="submit" class="btn btn-primary">Submit Order Cart</button>
           </div>
-
-          <table id="catalogTable">
+          
+          <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th>ISBN</th>
+                <th>ID</th>
                 <th>Title</th>
                 <th>Author</th>
-                <th>Category</th>
-                <th>Unit Price</th>
-                <th>In Stock</th>
-                <?php if ($role === 'manager'): ?>
-                <th>Qty Needed</th>
-                <?php endif; ?>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Order Qty</th>
               </tr>
             </thead>
             <tbody>
-
-              <?php if (empty($books)): ?>
-                <tr>
-                  <td colspan="8" style="text-align:center;padding:40px;color:var(--grey-400);">
-                    No books in inventory yet. Admin can add books via the dashboard.
-                  </td>
-                </tr>
-
-              <?php else: ?>
-                <?php foreach ($books as $i => $book): ?>
-
-                  <?php
-                    // Determine stock badge class
-                    $qty = (int)$book['stock_quantity'];
-                    if ($qty >= 20)       $stockClass = 'stock-high';
-                    elseif ($qty >= 10)   $stockClass = 'stock-medium';
-                    else                  $stockClass = 'stock-low';
-                  ?>
-
-                  <tr>
-                    <td><?php echo $i + 1; ?></td>
-                    <td class="td-isbn"><?php echo htmlspecialchars($book['isbn']); ?></td>
-                    <td class="td-title"><?php echo htmlspecialchars($book['title']); ?></td>
-                    <td class="td-author"><?php echo htmlspecialchars($book['author']); ?></td>
-                    <td><?php echo htmlspecialchars($book['category'] ?? '—'); ?></td>
-                    <td class="td-price">KES <?php echo number_format($book['price'], 0); ?></td>
-                    <td>
-                      <span class="stock-badge <?php echo $stockClass; ?>">
-                        <?php echo $qty; ?> units
-                      </span>
-                    </td>
-                    <?php if ($role === 'manager'): ?>
-                    <td>
-                      <?php if ($qty > 0): ?>
-                        <input
-                          type="number"
-                          class="qty-input"
-                          name="qty[<?php echo $book['id']; ?>]"
-                          min="1"
-                          max="<?php echo $qty; ?>"
-                          placeholder="0"
-                        >
-                      <?php else: ?>
-                        <span style="font-size:0.75rem;color:var(--red-primary);font-weight:600;">Out of Stock</span>
-                      <?php endif; ?>
-                    </td>
-                    <?php endif; ?>
-                  </tr>
-
-                <?php endforeach; ?>
-              <?php endif; ?>
-
+              <?php foreach ($books as $b): ?>
+              <tr>
+                <td><?php echo $b['id']; ?></td>
+                <td><strong><?php echo htmlspecialchars($b['title']); ?></strong></td>
+                <td><?php echo htmlspecialchars($b['author']); ?></td>
+                <td>Ksh <?php echo number_format($b['price'], 2); ?></td>
+                <td><?php echo $b['stock_quantity']; ?></td>
+                <td>
+                  <?php if ($b['stock_quantity'] > 0): ?>
+                    <input type="number" name="qty[<?php echo $b['id']; ?>]" class="form-control" min="1" max="<?php echo $b['stock_quantity']; ?>" placeholder="0" style="width: 80px;">
+                  <?php else: ?>
+                    <span style="color: var(--accent-red); font-weight: bold;">Out of Stock</span>
+                  <?php endif; ?>
+                </td>
+              </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
-
-        </div><!-- /table-card -->
-
+        </div>
       </form>
-
-    </div><!-- /page-body -->
-
+    </div>
   </main>
-
 </div>
-
-<script src="js/validation.js"></script>
 </body>
 </html>
