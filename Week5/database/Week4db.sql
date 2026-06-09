@@ -1,10 +1,3 @@
--- =============================================================
--- DECORUM BOOKSHOP — B2B INVENTORY SYSTEM
--- Week4db.sql — Database State at end of Week 4
--- =============================================================
--- Week 4 adds: requisitions and requisition_items tables
--- Login is now DB-backed (vs hardcoded credentials in Week 3)
--- =============================================================
 
 DROP DATABASE IF EXISTS decorum_bookshop;
 
