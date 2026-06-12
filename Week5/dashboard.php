@@ -1,8 +1,11 @@
 <?php
-// dashboard.php (Admin)
+
 require_once __DIR__ . '/includes/auth_guard.php';
 require_once __DIR__ . '/includes/db_connect.php';
 requireLogin('admin');
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
 // Fetch Stats for the Top Cards
 $totalBooks = $pdo->query("SELECT COUNT(*) FROM books")->fetchColumn();
