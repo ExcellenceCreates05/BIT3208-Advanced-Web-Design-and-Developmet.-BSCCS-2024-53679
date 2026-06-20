@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-session_destroy();
+session_destroy(); //reset all session data, including login attempts and lockout timers, Change Before deployment 
 session_start();
 require_once __DIR__ . '/includes/db_connect.php';
 
@@ -29,9 +29,9 @@ if (isset($_SESSION['lockout_time']) && time() < $_SESSION['lockout_time']) {
 $error_message = '';
 $username_value = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     
-    // 3. NEW: If they hit 5 attempts, set a 5-minute penalty timer!
+    // 3. NEW: If they hit 5 attempts, set a 5-minute penalty timer
     if ($_SESSION['login_attempts'] >= 5) {
         $_SESSION['lockout_time'] = time() + (2 * 60); // Current time + 2 minutes
         die("<div style='text-align:center; padding: 50px; font-family: Arial;'><h2>Account Locked</h2><p>Too many failed attempts. Please try again in 2 minutes.</p></div>");
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error_message = 'Invalid credentials. Attempts remaining: ' . (5 - $_SESSION['login_attempts']);
         }
     }}
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

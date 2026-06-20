@@ -57,7 +57,9 @@ $requisitions = $stmt->fetchAll();
     <nav class="sidebar-nav">
       <p class="nav-section-label">Main Menu</p>
       <ul>
+        //Change the href to a catalog.php or something that shows the products.
         <li class="nav-item"><a href="index.php"><span class="nav-icon">📋</span> Book Catalog</a></li>
+      
         <li class="nav-item"><a href="requisitions.php" class="active"><span class="nav-icon">📦</span>
           <?php echo $role === 'admin' ? 'All Requisitions' : 'My Requisitions'; ?>
         </a></li>

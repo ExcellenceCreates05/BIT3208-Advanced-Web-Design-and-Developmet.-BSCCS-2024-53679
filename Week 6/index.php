@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/includes/auth_guard.php';
 require_once __DIR__ . '/includes/db_connect.php';
-requireLogin();
+requireLogin('manager');
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
@@ -24,7 +24,7 @@ $books = $pdo->query("SELECT * FROM books ORDER BY title ASC")->fetchAll();
 <body>
 <div class="app-wrapper">
   
-  <aside class="sidebar">
+  <aside class="sidebar"> 
     <div class="sidebar-brand">Decorum Bookshop</div>
     <nav class="sidebar-nav">
       <ul>

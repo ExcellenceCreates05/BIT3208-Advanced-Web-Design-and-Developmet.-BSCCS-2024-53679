@@ -1,6 +1,4 @@
 <?php
-
-
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'decorum_bookshop');   
 define('DB_USER', 'root');               
