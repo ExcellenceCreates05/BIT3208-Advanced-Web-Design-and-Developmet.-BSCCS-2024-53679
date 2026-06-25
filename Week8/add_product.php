@@ -1,0 +1,73 @@
+<?php
+
+session_start();
+require_once __DIR__ . '/includes/auth_guard.php';
+require_once __DIR__ . '/includes/db_connect.php';
+requireLogin('admin');
+
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $isbn = trim(strip_tags($_POST['isbn']));
+    $title = trim(strip_tags($_POST['title']));
+    $author = trim(strip_tags($_POST['author']));
+    $publisher = trim(strip_tags($_POST['publisher']));
+    $category = trim(strip_tags($_POST['category']));
+    $price = (float)$_POST['price'];
+    $stock = (int)$_POST['stock_quantity'];
+    $year = (int)$_POST['year_published'];
+
+    if (empty($isbn) || empty($title) || empty($author) || $price <= 0) {
+        $error = "ISBN, Title, Author, and valid Price are required.";
+    } else {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO books (isbn, title, author, publisher, category, price, stock_quantity, year_published) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$isbn, $title, $author, $publisher, $category, $price, $stock, $year]);
+            $_SESSION['flash_success'] = "Book added successfully!";
+            header('Location: dashboard.php');
+            exit;
+        } catch (PDOException $e) {
+            $error = $e->getCode() == 23000 ? "A book with this ISBN already exists." : "Database error: " . $e->getMessage();
+        }
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Add Product</title><link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="app-wrapper">
+    <aside class="sidebar"><div class="sidebar-brand">Admin Portal</div>
+      <nav class="sidebar-nav"><ul>
+        <li><a href="dashboard.php">Dashboard</a></li>
+        <li><a href="dashboard.php" class="active">Products</a></li>
+      </ul></nav>
+    </aside>
+    <main class="main-content"><div class="page-body">
+      <div class="table-card" style="max-width: 600px; padding: 30px; margin: 0 auto;">
+        <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Add New Book</h2>
+        <?php if($error): ?><div class="alert alert-danger"><?php echo $error; ?></div><?php endif; ?>
+        <form method="POST">
+          <div class="form-group"><label>ISBN *</label><input type="text" name="isbn" class="form-control" required></div>
+          <div class="form-group"><label>Title *</label><input type="text" name="title" class="form-control" required></div>
+          <div class="form-group"><label>Author *</label><input type="text" name="author" class="form-control" required></div>
+          <div style="display:flex; gap:15px;">
+              <div class="form-group" style="flex:1;"><label>Category</label><input type="text" name="category" class="form-control"></div>
+              <div class="form-group" style="flex:1;"><label>Publisher</label><input type="text" name="publisher" class="form-control"></div>
+          </div>
+          <div style="display:flex; gap:15px;">
+              <div class="form-group" style="flex:1;"><label>Price (Ksh) *</label><input type="number" step="0.01" name="price" class="form-control" required></div>
+              <div class="form-group" style="flex:1;"><label>Initial Stock</label><input type="number" name="stock_quantity" class="form-control" value="0"></div>
+              <div class="form-group" style="flex:1;"><label>Year</label><input type="number" name="year_published" class="form-control"></div>
+          </div>
+          <div style="display:flex; gap: 10px; margin-top: 20px;">
+              <a href="dashboard.php" class="btn btn-outline">Cancel</a>
+              <button type="submit" class="btn btn-primary">Save to Database</button>
+          </div>
+        </form>
+      </div>
+    </div></main>
+  </div>
+</body>
+</html>

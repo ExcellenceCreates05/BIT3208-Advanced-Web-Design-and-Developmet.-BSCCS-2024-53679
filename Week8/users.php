@@ -106,6 +106,7 @@ $is_active = function($page) {
 </div>
 
 <!-- Link the global JavaScript to make the Hamburger menu work -->
+ 
 <script src="js/app.js"></script>
 </body>
 </html>
