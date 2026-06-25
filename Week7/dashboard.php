@@ -14,8 +14,6 @@ $ordersToday = $pdo->query("SELECT COUNT(*) FROM requisitions WHERE DATE(date_su
 // Assuming each requisition item has a quantity and price;
 $estRevenue = $pdo->query("SELECT COALESCE(SUM(ri.quantity_requested * b.price), 0) FROM requisition_items ri JOIN books b ON ri.book_id = b.id")->fetchColumn();
 
-$books = $pdo->query("SELECT * FROM books ORDER BY title ASC")->fetchAll();
-
 // Determine active navigation link
 $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
@@ -32,7 +30,7 @@ $is_active = function($page) {
 <div class="app-wrapper">
   
   <aside class="sidebar">
-    <div class="sidebar-brand">Decorum Admin</div>
+    <div class="sidebar-brand" style="font-size: 24px; padding: 25px 20px;">Decorum Admin</div>
     <nav class="sidebar-nav">
       <ul>
         <li><a href="dashboard.php" class="<?php echo $is_active('dashboard.php'); ?>">Dashboard</a></li>
@@ -47,79 +45,43 @@ $is_active = function($page) {
   </aside>
 
   <main class="main-content">
-    <div class="topbar">
-      <h2>Dashboard Overview</h2>
+    <div class="topbar" style="padding: 25px 30px;">
+      <h2 style="font-size: 28px;">Dashboard Overview</h2>
     </div>
 
-    <div class="page-body">
+    <div class="page-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; padding: 40px;">
+      
       <?php if(isset($_SESSION['flash_success'])): ?>
-        <div class="alert alert-success"><?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
+        <div class="alert alert-success" style="width: 100%; max-width: 1100px; box-sizing: border-box;"><?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
       <?php endif; ?>
       <?php if(isset($_SESSION['flash_error'])): ?>
-        <div class="alert alert-danger"><?php echo $_SESSION['flash_error']; unset($_SESSION['flash_error']); ?></div>
+        <div class="alert alert-danger" style="width: 100%; max-width: 1100px; box-sizing: border-box;"><?php echo $_SESSION['flash_error']; unset($_SESSION['flash_error']); ?></div>
       <?php endif; ?>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3>Total Books</h3>
-          <div class="value"><?php echo number_format($totalBooks); ?></div>
+      <div class="stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; width: 100%; max-width: 1100px; margin: 0 auto;">
+        
+        <div class="stat-card" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Total Books</h3>
+          <div class="value" style="font-size: 48px; font-weight: bold; color: #1e3a8a;"><?php echo number_format($totalBooks); ?></div>
         </div>
-        <div class="stat-card">
-          <h3>Total Stock</h3>
-          <div class="value"><?php echo number_format($totalStock); ?></div>
+        
+        <div class="stat-card" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Total Stock</h3>
+          <div class="value" style="font-size: 48px; font-weight: bold; color: #1e3a8a;"><?php echo number_format($totalStock); ?></div>
         </div>
-        <div class="stat-card">
-          <h3>Orders Today</h3>
-          <div class="value"><?php echo number_format($ordersToday); ?></div>
+        
+        <div class="stat-card" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Orders Today</h3>
+          <div class="value" style="font-size: 48px; font-weight: bold; color: #1e3a8a;"><?php echo number_format($ordersToday); ?></div>
         </div>
-        <div class="stat-card red-accent">
-          <h3>Est. Revenue</h3>
-          <div class="value">Ksh <?php echo number_format($estRevenue); ?></div>
+        
+        <div class="stat-card red-accent" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-top: 5px solid #ef4444;">
+          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Est. Revenue</h3>
+          <div class="value" style="font-size: 48px; font-weight: bold; color: #ef4444;">Ksh <?php echo number_format($estRevenue); ?></div>
         </div>
+
       </div>
 
-      <div class="table-card">
-        <div class="table-header">
-          <div class="search-bar">
-            <input type="text" class="form-control" placeholder="Search products...">
-          </div>
-          <a href="add_product.php" class="btn btn-primary">Add Product</a>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Publisher</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($books as $b): ?>
-            <tr>
-              <td><strong><?php echo htmlspecialchars($b['title']); ?></strong></td>
-              <td><?php echo htmlspecialchars($b['category']); ?></td>
-              <td><?php echo htmlspecialchars($b['publisher'] ?? 'N/A'); ?></td>
-              <td>Ksh <?php echo number_format($b['price'], 2); ?></td>
-              <td><?php echo $b['stock_quantity']; ?></td>
-              
-              <td>
-                <div style="display: flex; gap: 5px;">
-                    <a href="edit_product.php?id=<?php echo $b['id']; ?>" class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">Edit</a>
-                    
-                    <form action="delete_product.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this book?');">
-                        <input type="hidden" name="id" value="<?php echo $b['id']; ?>">
-                        <button type="submit" class="btn btn-danger-text" style="padding: 5px 10px; font-size: 12px;">Delete</button>
-                    </form>
-                </div>
-              </td>
-            </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
     </div>
   </main>
 </div>

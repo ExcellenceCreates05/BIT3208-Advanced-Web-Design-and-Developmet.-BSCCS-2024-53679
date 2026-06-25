@@ -319,7 +319,7 @@ if (selectAll) {
 }
 
 
-/* =============================================================
+/* ========================================================
    8. DELETE CONFIRMATION — Populate modal dynamically
    Called from table row: onclick="confirmDelete(id, title)"
    ============================================================= */
