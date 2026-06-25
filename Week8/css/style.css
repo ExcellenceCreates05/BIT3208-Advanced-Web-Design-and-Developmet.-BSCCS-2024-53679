@@ -1,0 +1,290 @@
+:root {
+    --bg-main: #F4F7FB;       /* Light blue-grey background */
+    --bg-card: #FFFFFF;       /* White cards */
+    --primary-blue: #1E3A8A;  /* Deep Navy Blue */
+    --sidebar-blue: #0F172A;  /* Very Dark Blue for Sidebar */
+    --accent-red: #DC2626;    /* Critical Action Red */
+    --accent-red-hover: #B91C1C;
+    --text-dark: #1E293B;
+    --text-muted: #64748B;
+    --border-color: #E2E8F0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+
+body { background-color: var(--bg-main); color: var(--text-dark); }
+
+/* --- LOGIN PAGE --- */
+.login-bg {
+    background-color: var(--primary-blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-card {
+    background: var(--bg-card);
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card h1 { color: var(--primary-blue); text-align: center; margin-bottom: 25px; font-size: 24px; }
+
+/* --- APP LAYOUT (Sidebar + Main) --- */
+.app-wrapper { display: flex; min-height: 100vh; }
+
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-blue);
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-brand { padding: 20px; font-size: 20px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar-nav { flex-grow: 1; padding: 20px 0; }
+.sidebar-nav ul { list-style: none; }
+.sidebar-nav li a {
+    display: block;
+    padding: 12px 20px;
+    color: #CBD5E1;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.sidebar-nav li a:hover, .sidebar-nav li a.active {
+    background-color: var(--primary-blue);
+    color: white;
+    border-left: 4px solid var(--accent-red);
+}
+
+.main-content { flex-grow: 1; display: flex; flex-direction: column; }
+.topbar {
+    background: var(--bg-card);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+.topbar h2 { color: var(--primary-blue); }
+
+.page-body { padding: 30px; }
+
+/* --- DASHBOARD STATS (Grid matching wireframes) --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border-top: 4px solid var(--primary-blue);
+    text-align: center;
+}
+.stat-card.red-accent { border-top-color: var(--accent-red); }
+.stat-card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+.stat-card .value { font-size: 28px; font-weight: bold; color: var(--primary-blue); }
+
+/* --- TABLES & CARDS --- */
+.table-card {
+    background: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+.table-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--border-color); }
+th { background-color: #F8FAFC; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+tbody tr:hover { background-color: #F1F5F9; }
+
+/* --- FORMS & BUTTONS --- */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; color: var(--text-muted); font-size: 14px; }
+.form-control {
+    width: 100%; padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px; outline: none;
+}
+.form-control:focus { border-color: var(--primary-blue); }
+
+.btn {
+    padding: 10px 15px; border: none; border-radius: 4px;
+    cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block;
+}
+.btn-primary { background-color: var(--accent-red); color: white; }
+.btn-primary:hover { background-color: var(--accent-red-hover); }
+.btn-outline { background-color: transparent; border: 1px solid var(--primary-blue); color: var(--primary-blue); }
+.btn-danger-text { background: none; color: var(--accent-red); border: none; cursor: pointer; font-weight: bold; }
+
+.search-bar { display: flex; gap: 10px; width: 100%; max-width: 400px; }
+.alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+.alert-danger { background-color: #FEE2E2; color: #991B1B; }
+.alert-success { background-color: #DCFCE7; color: #166534; }
+
+/* =========================================================
+    CSS GRID PRODUCT CARDS
+   ========================================================= */
+
+.products-grid {
+    display: grid;
+    /* This magical line automatically adjusts the number of columns based on screen size! */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.product-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+/* Responsive Image Rule*/
+.product-image {
+    width: 100%;
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover; /* Keeps image proportions nice */
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #f8fafc;
+}
+
+.product-title {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.product-category {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin-bottom: 15px;
+}
+
+.product-actions {
+    margin-top: auto; /* Pushes buttons to the very bottom of the card */
+    display: flex;
+    gap: 10px;
+}
+/* =========================================================
+    RESPONSIVE DATA TABLES (SWIPE TO SCROLL)
+   ========================================================= */
+
+/* On mobile screens, wrap tables in a horizontally scrollable container */
+@media (max-width: 768px) {
+    .table-card {
+        /* This prevents the card from stretching the screen */
+        max-width: 100vw; 
+        /* Enables horizontal swiping */
+        overflow-x: auto; 
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iPhones */
+        padding: 15px;
+    }
+
+    table {
+        /* Force the table to stay wide enough to read */
+        min-width: 600px; 
+    }
+    
+    /* Make the action buttons stack nicely on small rows */
+    td .btn, td .btn-outline, td .btn-danger-text {
+        padding: 8px 10px;
+        font-size: 11px;
+    }
+}
+/* =========================================================
+ RESPONSIVE TABLE STACKING (MOBILE CARDS)
+   ========================================================= */
+
+@media (max-width: 768px) {
+    /* 1. Force every part of the table to behave like a standard block */
+    table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+
+    /* 2. Hide the top header row visually, but keep it for screen readers */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    /* 3. Turn each row into its own "Card" */
+    tr {
+        margin-bottom: 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        background: #ffffff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* 4. Format the individual cells to stack nicely */
+    td {
+        border-bottom: 1px solid #f1f5f9;
+        text-align: right; 
+        padding: 10px 15px 10px 50%; /* Leave 50% space on the left for our labels */
+        position: relative;
+        min-height: 40px;
+    }
+
+    td:last-child {
+        border-bottom: none;
+    }
+
+    /* 5. Create the pseudo-labels for the left side of the card */
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        width: 45%;
+        font-weight: 600;
+        text-align: left;
+        color: #64748b;
+    }
+    
+    /* Center action buttons in the mobile view */
+    td .btn, td .btn-outline, td .btn-danger-text {
+        display: inline-block;
+        margin-top: 5px;
+    }
+}
+/* =========================================================
+    SIDEBAR TOGGLE LOGIC
+   ========================================================= */
+.sidebar.collapsed {
+    display: none !important;
+}
