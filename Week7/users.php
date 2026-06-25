@@ -2,7 +2,7 @@
 require_once __DIR__ . '/includes/auth_guard.php';
 require_once __DIR__ . '/includes/db_connect.php';
 
-// STRICT SECURITY: Only logged-in Admins can view the user list
+// STRICT SECURITY: Only logged-in Admins can view the users.php page. If not, redirect to login.
 requireLogin('admin');
 
 // Fetch all users from the database, sorted by Role and then Name
