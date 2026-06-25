@@ -14,6 +14,8 @@ $ordersToday = $pdo->query("SELECT COUNT(*) FROM requisitions WHERE DATE(date_su
 // Assuming each requisition item has a quantity and price;
 $estRevenue = $pdo->query("SELECT COALESCE(SUM(ri.quantity_requested * b.price), 0) FROM requisition_items ri JOIN books b ON ri.book_id = b.id")->fetchColumn();
 
+// Removed the books fetch query since the table is no longer on this page
+
 // Determine active navigation link
 $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
@@ -30,14 +32,15 @@ $is_active = function($page) {
 <div class="app-wrapper">
   
   <aside class="sidebar">
-    <div class="sidebar-brand" style="font-size: 24px; padding: 25px 20px;">Decorum Admin</div>
+    <!-- Increased size and centered the Decorum Admin text -->
+    <div class="sidebar-brand" style="font-size: 1.8rem; padding: 30px 20px; text-align: center; line-height: 1.3;">Decorum Admin</div>
     <nav class="sidebar-nav">
       <ul>
         <li><a href="dashboard.php" class="<?php echo $is_active('dashboard.php'); ?>">Dashboard</a></li>
         <li><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>">Products</a></li>
         <li><a href="#">Categories</a></li>
         <li><a href="requisitions.php" class="<?php echo $is_active('requisitions.php'); ?>">Orders</a></li>
-        <li><a href="#">Users</a></li>
+        <li><a href="users.php" class="<?php echo $is_active('users.php'); ?>">Users</a></li>
         <li><a href="#">Profile</a></li>
         <li><a href="logout.php">Logout</a></li>
       </ul>
@@ -45,39 +48,45 @@ $is_active = function($page) {
   </aside>
 
   <main class="main-content">
-    <div class="topbar" style="padding: 25px 30px;">
-      <h2 style="font-size: 28px;">Dashboard Overview</h2>
+    <!-- Modified Topbar to include the Register User button -->
+    <div class="topbar" style="display: flex; justify-content: space-between; align-items: center; padding-right: 40px;">
+      <!-- Increased the main heading size -->
+      <h2 style="font-size: 2.2rem; margin: 0;">Dashboard Overview</h2>
+      <!-- New Quick Action Button -->
+      <a href="users.php" class="btn btn-primary" style="padding: 12px 24px; font-size: 1.1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">+ Add System User</a>
     </div>
 
-    <div class="page-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70vh; padding: 40px;">
+    <!-- Centered flexbox wrapper taking up most of the screen height -->
+    <div class="page-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh; padding: 40px;">
       
       <?php if(isset($_SESSION['flash_success'])): ?>
-        <div class="alert alert-success" style="width: 100%; max-width: 1100px; box-sizing: border-box;"><?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
+        <div class="alert alert-success" style="width: 100%; max-width: 1000px; font-size: 1.2rem; text-align: center; margin-bottom: 30px;"><?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
       <?php endif; ?>
       <?php if(isset($_SESSION['flash_error'])): ?>
-        <div class="alert alert-danger" style="width: 100%; max-width: 1100px; box-sizing: border-box;"><?php echo $_SESSION['flash_error']; unset($_SESSION['flash_error']); ?></div>
+        <div class="alert alert-danger" style="width: 100%; max-width: 1000px; font-size: 1.2rem; text-align: center; margin-bottom: 30px;"><?php echo $_SESSION['flash_error']; unset($_SESSION['flash_error']); ?></div>
       <?php endif; ?>
 
-      <div class="stats-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; width: 100%; max-width: 1100px; margin: 0 auto;">
+      <!-- Massive 2x2 Grid for the Stat Cards -->
+      <div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; max-width: 1000px;">
         
-        <div class="stat-card" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Total Books</h3>
-          <div class="value" style="font-size: 48px; font-weight: bold; color: #1e3a8a;"><?php echo number_format($totalBooks); ?></div>
+        <div class="stat-card" style="padding: 50px 30px; text-align: center; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); background: #fff;">
+          <h3 style="font-size: 1.6rem; color: #64748B; margin-bottom: 15px;">Total Books</h3>
+          <div class="value" style="font-size: 4rem; color: #1E3A8A; font-weight: 800;"><?php echo number_format($totalBooks); ?></div>
         </div>
         
-        <div class="stat-card" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Total Stock</h3>
-          <div class="value" style="font-size: 48px; font-weight: bold; color: #1e3a8a;"><?php echo number_format($totalStock); ?></div>
+        <div class="stat-card" style="padding: 50px 30px; text-align: center; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); background: #fff;">
+          <h3 style="font-size: 1.6rem; color: #64748B; margin-bottom: 15px;">Total Stock</h3>
+          <div class="value" style="font-size: 4rem; color: #1E3A8A; font-weight: 800;"><?php echo number_format($totalStock); ?></div>
         </div>
         
-        <div class="stat-card" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Orders Today</h3>
-          <div class="value" style="font-size: 48px; font-weight: bold; color: #1e3a8a;"><?php echo number_format($ordersToday); ?></div>
+        <div class="stat-card" style="padding: 50px 30px; text-align: center; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); background: #fff;">
+          <h3 style="font-size: 1.6rem; color: #64748B; margin-bottom: 15px;">Orders Today</h3>
+          <div class="value" style="font-size: 4rem; color: #1E3A8A; font-weight: 800;"><?php echo number_format($ordersToday); ?></div>
         </div>
         
-        <div class="stat-card red-accent" style="padding: 40px; text-align: center; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-top: 5px solid #ef4444;">
-          <h3 style="font-size: 20px; margin-bottom: 15px; color: #64748b;">Est. Revenue</h3>
-          <div class="value" style="font-size: 48px; font-weight: bold; color: #ef4444;">Ksh <?php echo number_format($estRevenue); ?></div>
+        <div class="stat-card red-accent" style="padding: 50px 30px; text-align: center; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); background: #fff; border-bottom: 6px solid #EF4444;">
+          <h3 style="font-size: 1.6rem; color: #64748B; margin-bottom: 15px;">Est. Revenue</h3>
+          <div class="value" style="font-size: 4rem; color: #EF4444; font-weight: 800;">Ksh <?php echo number_format($estRevenue); ?></div>
         </div>
 
       </div>

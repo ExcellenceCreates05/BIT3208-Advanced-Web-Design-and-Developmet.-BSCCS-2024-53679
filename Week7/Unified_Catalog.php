@@ -37,7 +37,7 @@ $is_active = function($page) {
             <li><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>">Products</a></li>
             <li><a href="#">Categories</a></li>
             <li><a href="requisitions.php" class="<?php echo $is_active('requisitions.php'); ?>">Orders</a></li>
-            <li><a href="#">Users</a></li>
+            <li><a href="users.php" class="<?php echo $is_active('users.php'); ?>">Users</a></li>
             <li><a href="#">Profile</a></li>
         <?php else: ?>
             <li><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>">Products</a></li>
