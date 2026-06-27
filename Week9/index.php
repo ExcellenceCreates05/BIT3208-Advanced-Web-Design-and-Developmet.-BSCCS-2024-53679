@@ -32,7 +32,7 @@ include 'includes/master_header.php';
         <div class="table-card">
           <div class="table-header">
              <div class="search-bar">
-               <input id="inventorySearch" data-table-search="inventoryTable" type="text" class="form-control" placeholder="Search Inventory">
+               <input type="text" class="form-control" placeholder="Search Inventory">
                <select class="form-control" style="width: auto;">
                  <option>Search Category</option>
                  <option>Fiction</option>
@@ -43,7 +43,7 @@ include 'includes/master_header.php';
              <button type="submit" class="btn btn-primary">Submit Order Cart</button>
           </div>
           
-          <table id="inventoryTable">
+          <table>
             <thead>
               <tr>
                 <th>ID</th>

@@ -45,7 +45,7 @@ include 'includes/master_header.php';
   <div class="table-card" style="margin-bottom: 16px;">
     <div class="table-header">
       <div class="search-bar">
-        <input type="text" id="productSearch" data-card-search="productCard" class="form-control" placeholder="Search products...">
+        <input type="text" id="productSearch" class="form-control" placeholder="Search products...">
       </div>
       <div style="flex:1"></div>
     </div>

@@ -21,8 +21,8 @@
     --border-color: rgba(229, 208, 177, 0.5); /* Soft faint apricot border */
 
     /* --- REQUESTED FONTS --- */
-    --font-heading: 'Futura', 'Raleway', sans-serif;
-    --font-body: 'Arial', 'Roboto Slab', sans-serif;
+    --font-heading: 'Futura', 'Raleway';
+    --font-body: 'Roboto Slab', 'Arial';
 }
 
 * { 
@@ -69,13 +69,20 @@ h1, h2, h3, h4, h5, h6, .sidebar-brand {
 /* --- APP LAYOUT (Sidebar + Main) --- */
 .app-wrapper { display: flex; min-height: 100vh; overflow-x: hidden; }
 
-/* THE SIDEBAR (Soft, Pill-Shaped Links) */
+/* THE SIDEBAR (Fixed overlay that hovers over content) */
 .sidebar {
+    position: fixed; /* Takes it out of the flow so it doesn't push content */
+    top: 0; 
+    left: 0; 
+    bottom: 0;
     width: 260px;
-    background-color: var(--sidebar-blue); /* Now transparent */
+    background-color: var(--bg-main); /* Given a solid background so it hides content underneath when open */
     color: var(--text-dark);
     display: flex;
     flex-direction: column;
+    z-index: 1000; /* Ensures it sits above everything */
+    transition: transform 0.3s ease-in-out; /* Smooth sliding animation */
+    box-shadow: 5px 0 20px rgba(70, 32, 18, 0.08); /* Drop shadow to emphasize floating */
 }
 
 .sidebar-brand { 
@@ -111,22 +118,76 @@ h1, h2, h3, h4, h5, h6, .sidebar-brand {
     display: flex; 
     flex-direction: column; 
     background: var(--bg-card);
-    margin: 15px 15px 15px 0; /* Creates the floating effect */
+    /* 275px left margin keeps it visible next to the fixed desktop sidebar */
+    margin: 15px 15px 15px 275px; 
     border-radius: 30px; /* Big soft corners */
     box-shadow: 0 10px 40px rgba(70, 32, 18, 0.08); /* Subtle cocoa shadow */
     overflow: hidden;
+    min-height: calc(100vh - 30px);
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin: 15px;
+    }
+
+    .sidebar-overlay {
+        display: none;
+    }
+
+    .sidebar-overlay.visible {
+        display: block;
+    }
 }
 .topbar {
-    background: transparent;
+    background: rgba(255,255,255,0.95);
     padding: 25px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(6px);
 }
-.topbar h2 { color: var(--primary-blue); }
+.topbar h2 {
+    color: var(--primary-blue);
+    font-size: clamp(18px, 2.5vw, 24px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-.page-body { padding: 30px; }
+/* --- RESTORED HAMBURGER BUTTON --- */
+.hamburger-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--primary-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    transition: background 0.2s, color 0.2s;
+}
+.hamburger-btn:hover {
+    background: rgba(167, 125, 93, 0.12);
+    color: var(--color-camel);
+}
+
+.page-body { padding: clamp(20px, 4vw, 30px); flex-grow: 1; }
 
 /* --- DASHBOARD STATS --- */
 .stats-grid {
@@ -160,6 +221,8 @@ h1, h2, h3, h4, h5, h6, .sidebar-brand {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     border-bottom: 1px solid var(--border-color);
 }
 table { width: 100%; border-collapse: collapse; }
@@ -259,32 +322,37 @@ tbody tr:hover { background-color: rgba(229, 208, 177, 0.15); }
 }
 
 /* =========================================================
-    RESPONSIVE DATA TABLES (SWIPE TO SCROLL)
+ RESPONSIVE TABLE STACKING (MOBILE CARDS) & FORM RESIZING
    ========================================================= */
 
-@media (max-width: 768px) {
-    .table-card {
-        max-width: 100vw; 
-        overflow-x: auto; 
-        -webkit-overflow-scrolling: touch;
-        padding: 15px;
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
     }
 
-    table {
-        min-width: 600px; 
+    .sidebar.open {
+        transform: translateX(0);
     }
-    
-    td .btn, td .btn-outline, td .btn-danger-text {
-        padding: 8px 15px;
-        font-size: 11px;
+
+    .main-content {
+        margin: 15px;
+    }
+
+    .sidebar-overlay {
+        display: none;
+    }
+
+    .sidebar-overlay.visible {
+        display: block;
     }
 }
 
-/* =========================================================
- RESPONSIVE TABLE STACKING (MOBILE CARDS)
-   ========================================================= */
-
 @media (max-width: 768px) {
+    /* Make main content take full width so sidebar can overlay when toggled */
+    .main-content {
+        margin: 15px; 
+    }
+
     table, thead, tbody, th, td, tr {
         display: block;
         width: 100%;
@@ -334,8 +402,9 @@ tbody tr:hover { background-color: rgba(229, 208, 177, 0.15); }
 }
 
 /* =========================================================
-    SIDEBAR TOGGLE LOGIC
+    SIDEBAR TOGGLE LOGIC (SLIDE IN ANIMATION)
    ========================================================= */
 .sidebar.collapsed {
-    display: none !important;
+    /* Transforms out of view smoothly without affecting the main-content */
+    transform: translateX(-100%);
 }

@@ -27,11 +27,11 @@ include 'includes/master_header.php';
       <div class="table-card">
         <div class="table-header">
           <div class="search-bar">
-            <input id="userSearch" data-table-search="usersTable" type="text" class="form-control" placeholder="Search users by name or branch...">
+            <input type="text" class="form-control" placeholder="Search users by name or branch...">
           </div>
         </div>
 
-        <table id="usersTable">
+        <table>
           <thead>
             <tr>
               <th>Full Name</th>
