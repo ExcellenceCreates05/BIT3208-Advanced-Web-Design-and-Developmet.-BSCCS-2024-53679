@@ -12,48 +12,15 @@ $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
 };
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Management - Decorum Admin</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-<div class="app-wrapper">
-  
-  <aside class="sidebar" id="mainSidebar">
-    <div class="sidebar-brand" style="font-size: 1.8rem; padding: 30px 20px; text-align: center; line-height: 1.3;">Decorum Admin</div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li><a href="dashboard.php" class="<?php echo $is_active('dashboard.php'); ?>">Dashboard</a></li>
-        <li><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>">Products</a></li>
-        <li><a href="#">Categories</a></li>
-        <li><a href="requisitions.php" class="<?php echo $is_active('requisitions.php'); ?>">Orders</a></li>
-        <li><a href="users.php" class="<?php echo $is_active('users.php'); ?>">Users</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
-  </aside>
+<?php
+// Central header
+$page_title = 'User Management - Decorum Admin';
+$page_heading = 'System Users';
+$topbar_actions = '<a href="register_user_form.php" class="btn btn-primary">+ Add New User</a>';
+include 'includes/master_header.php';
+?>
 
-  <main class="main-content">
-    <div class="topbar" style="display: flex; justify-content: space-between; align-items: center; padding-right: 40px; flex-wrap: wrap;">
-      
-      <div style="display: flex; align-items: center;">
-        <button id="sidebarToggle" style="background: none; border: none; font-size: 1.8rem; cursor: pointer; margin-right: 15px; color: #1e3a8a; display: flex; align-items: center;" title="Toggle Sidebar">
-          ☰
-        </button>
-        <h2 style="font-size: 2.2rem; margin: 0;">System Users</h2>
-      </div>
-
-      <a href="register.php" class="btn btn-primary" style="padding: 10px 20px; font-size: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">+ Add New User</a>
-    </div>
-
-    <div class="page-body">
-      
-      <?php if(isset($_SESSION['flash_success'])): ?>
+<?php if(isset($_SESSION['flash_success'])): ?>
         <div class="alert alert-success"><?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
       <?php endif; ?>
 

@@ -59,38 +59,12 @@ $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
 };
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Edit User - Decorum Admin</title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<div class="app-wrapper">
-  
-  <aside class="sidebar">
-    <div class="sidebar-brand" style="font-size: 1.8rem; padding: 30px 20px; text-align: center; line-height: 1.3;">Decorum Admin</div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li><a href="dashboard.php">Dashboard</a></li>
-        <li><a href="Unified_Catalog.php">Products</a></li>
-        <li><a href="#">Categories</a></li>
-        <li><a href="requisitions.php">Orders</a></li>
-        <li><a href="users.php" class="active">Users</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
-  </aside>
+<?php
+$page_title = 'Edit User - Decorum Admin';
+$page_heading = 'User Management: Edit Account';
+include 'includes/master_header.php';
+?>
 
-  <main class="main-content">
-    <div class="topbar">
-      <h2>User Management: Edit Account</h2>
-    </div>
-
-    <div class="page-body">
       <div class="table-card" style="max-width: 600px; margin: 0 auto; padding: 30px;">
         <h3 style="margin-bottom: 20px; color: var(--primary-blue);">Update System User</h3>
         
@@ -132,8 +106,11 @@ $is_active = function($page) {
           </div>
         </form>
       </div>
-    </div>
-  </main>
-</div>
+
+  </div> <!-- Close page-body -->
+</main> <!-- Close main-content -->
+</div> <!-- Close app-wrapper -->
+
+<script src="js/app.js"></script>
 </body>
 </html>

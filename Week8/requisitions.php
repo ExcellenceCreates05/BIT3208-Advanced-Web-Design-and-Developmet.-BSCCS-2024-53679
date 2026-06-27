@@ -41,67 +41,13 @@ $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
 };
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Requisitions — Decorum Bookshop</title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-
-<div class="app-wrapper">
-
-  <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="brand-icon">📚</div>
-      <h1>Decorum Bookshop</h1>
-      <p>B2B Inventory Portal</p>
-    </div>
-    <nav class="sidebar-nav">
-      <p class="nav-section-label">Main Menu</p>
-      <ul>
-        <li class="nav-item"><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>"><span class="nav-icon">📋</span> Book Catalog</a></li>
-      
-        <li class="nav-item"><a href="requisitions.php" class="<?php echo $is_active('requisitions.php'); ?>"><span class="nav-icon">📦</span>
-          <?php echo $role === 'admin' ? 'All Requisitions' : 'My Requisitions'; ?>
-        </a></li>
-      </ul>
-      <?php if ($role === 'admin'): ?>
-      <p class="nav-section-label" style="margin-top:16px;">Administration</p>
-      <ul>
-        <li class="nav-item"><a href="dashboard.php" class="<?php echo $is_active('dashboard.php'); ?>"><span class="nav-icon">⚙️</span> Admin Dashboard</a></li>
-      </ul>
-      <?php endif; ?>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="user-info">
-        <div class="user-avatar"><?php echo $initials; ?></div>
-        <div class="user-details">
-          <div class="user-name"><?php echo htmlspecialchars($fullName); ?></div>
-          <div class="user-role"><?php echo ucfirst($role); ?></div>
-        </div>
-      </div>
-      <a href="logout.php" class="btn btn-logout btn-sm" style="width:100%;justify-content:center;">🚪 Logout</a>
-    </div>
-  </aside>
-
-  <main class="main-content">
-    <div class="topbar">
-      <div class="topbar-left">
-        <h2><?php echo $role === 'admin' ? 'All Requisitions' : 'My Requisitions'; ?></h2>
-        <div class="breadcrumb">Home › Requisitions</div>
-      </div>
-      <div class="topbar-right">
-        <?php if ($role === 'manager'): ?>
-          <a href="index.php" class="btn btn-primary">➕ New Requisition</a>
-        <?php endif; ?>
-      </div>
-    </div>
-
-    <div class="page-body">
+<?php
+// Central header
+$page_title = $role === 'admin' ? 'All Requisitions — Decorum' : 'My Requisitions — Decorum';
+$page_heading = $role === 'admin' ? 'All Requisitions' : 'My Requisitions';
+$topbar_actions = $role === 'manager' ? '<a href="index.php" class="btn btn-primary">➕ New Requisition</a>' : '';
+include 'includes/master_header.php';
+?>
 
       <div class="table-card">
         <div class="table-header">
@@ -149,6 +95,8 @@ $is_active = function($page) {
   </main>
 </div>
 
+</script>
 <script src="js/validation.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

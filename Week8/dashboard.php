@@ -21,45 +21,14 @@ $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
 };
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin Dashboard - Decorum</title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<div class="app-wrapper">
-  
-  <aside class="sidebar">
-    <!-- Increased size and centered the Decorum Admin text -->
-    <div class="sidebar-brand" style="font-size: 1.8rem; padding: 30px 20px; text-align: center; line-height: 1.3;">Decorum Admin</div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li><a href="dashboard.php" class="<?php echo $is_active('dashboard.php'); ?>">Dashboard</a></li>
-        <li><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>">Products</a></li>
-        <li><a href="#">Categories</a></li>
-        <li><a href="requisitions.php" class="<?php echo $is_active('requisitions.php'); ?>">Orders</a></li>
-        <li><a href="users.php" class="<?php echo $is_active('users.php'); ?>">Users</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="logout.php">Logout</a></li>
-      </ul>
-    </nav>
-  </aside>
 
-  <main class="main-content">
-    <!-- Modified Topbar to include the Register User button -->
-    <div class="topbar" style="display: flex; justify-content: space-between; align-items: center; padding-right: 40px;">
-      <!-- Increased the main heading size -->
-      <h2 style="font-size: 2.2rem; margin: 0;">Dashboard Overview</h2>
-      <!-- New Quick Action Button -->
-      <a href="users.php" class="btn btn-primary" style="padding: 12px 24px; font-size: 1.1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">+ Add System User</a>
-    </div>
+<?php
+$page_title = 'Admin Dashboard - Decorum';
+$page_heading = 'Dashboard Overview';
+$topbar_actions = '<a href="users.php" class="btn btn-primary">+ Add System User</a>';
+include 'includes/master_header.php';
+?>
 
-    <!-- Centered flexbox wrapper taking up most of the screen height -->
-    <div class="page-body" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 75vh; padding: 40px;">
-      
       <?php if(isset($_SESSION['flash_success'])): ?>
         <div class="alert alert-success" style="width: 100%; max-width: 1000px; font-size: 1.2rem; text-align: center; margin-bottom: 30px;"><?php echo $_SESSION['flash_success']; unset($_SESSION['flash_success']); ?></div>
       <?php endif; ?>
@@ -96,4 +65,5 @@ $is_active = function($page) {
   </main>
 </div>
 </body>
-</html>
+    <script src="js/app.js"></script>
+    </html>

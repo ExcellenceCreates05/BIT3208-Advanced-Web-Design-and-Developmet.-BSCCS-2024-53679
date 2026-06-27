@@ -31,20 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head><title>Add Product</title><link rel="stylesheet" href="css/style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-  <div class="app-wrapper">
-    <aside class="sidebar"><div class="sidebar-brand">Admin Portal</div>
-      <nav class="sidebar-nav"><ul>
-        <li><a href="dashboard.php">Dashboard</a></li>
-        <li><a href="dashboard.php" class="active">Products</a></li>
-      </ul></nav>
-    </aside>
-    <main class="main-content"><div class="page-body">
+<?php
+$page_title = 'Add Product';
+$page_heading = 'Add New Book';
+include 'includes/master_header.php';
+?>
+
       <div class="table-card" style="max-width: 600px; padding: 30px; margin: 0 auto;">
         <h2 style="color: var(--primary-blue); margin-bottom: 20px;">Add New Book</h2>
         <?php if($error): ?><div class="alert alert-danger"><?php echo $error; ?></div><?php endif; ?>
@@ -67,7 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </form>
       </div>
-    </div></main>
-  </div>
+
+  </div> <!-- Close page-body -->
+</main> <!-- Close main-content -->
+</div> <!-- Close app-wrapper -->
+
+<script src="js/app.js"></script>
 </body>
 </html>

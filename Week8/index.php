@@ -19,41 +19,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $is_active = function($page) {
     return basename($_SERVER['PHP_SELF']) === $page ? 'active' : '';
 };
+
+$page_title = "Products Catalog - Decorum";
+$page_heading = "Products Catalog";
+$topbar_actions = '<button type="submit" form="orderForm" class="btn btn-primary">Submit Order Cart</button>';
+include 'includes/master_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Products Catalog - Decorum</title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<div class="app-wrapper">
-  
-  <aside class="sidebar"> 
-    <div class="sidebar-brand">Decorum Bookshop</div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li><a href="Unified_Catalog.php" class="<?php echo $is_active('Unified_Catalog.php'); ?>">Products</a></li>
-        <li><a href="requisitions.php" class="<?php echo $is_active('requisitions.php'); ?>">My Orders</a></li>
-        <li><a href="#" class="<?php echo $is_active('profile.php'); ?>">Profile</a></li>
-        <li><a href="#" class="<?php echo $is_active('settings.php'); ?>">Settings</a></li>
-        <li><a href="logout.php" style="color: #FCA5A5;">Logout</a></li>
-      </ul>
-    </nav>
-  </aside>
+<?php if ($flash): ?><div class="alert alert-success"><?php echo htmlspecialchars($flash); ?></div><?php endif; ?>
+<?php if ($error): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div><?php endif; ?>
 
-  <main class="main-content">
-    <div class="topbar">
-      <h2>Products Catalog</h2>
-    </div>
-
-    <div class="page-body">
-      <?php if ($flash): ?><div class="alert alert-success"><?php echo htmlspecialchars($flash); ?></div><?php endif; ?>
-      <?php if ($error): ?><div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div><?php endif; ?>
-
-      <form action="process_requisition.php" method="POST">
+      <form id="orderForm" action="process_requisition.php" method="POST">
         <div class="table-card">
           <div class="table-header">
              <div class="search-bar">
@@ -100,8 +75,11 @@ $is_active = function($page) {
           </table>
         </div>
       </form>
-    </div>
-  </main>
-</div>
+
+  </div> <!-- Close page-body -->
+</main> <!-- Close main-content -->
+</div> <!-- Close app-wrapper -->
+
+<script src="js/app.js"></script>
 </body>
 </html>
